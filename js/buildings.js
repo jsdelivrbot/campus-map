@@ -1,5 +1,5 @@
 // The first line here loads the data in the building-centroids GeoJSON file
-$.getJSON("https://rawgit.com/pennstategeog467/campus-map/gh-pages/data/building-centroids.json", function(centroids) {
+$.getJSON("https://cdn.rawgit.com/pennstategeog467/campus-map/gh-pages/data/building-centroids.json", function(centroids) {
   
   $.getJSON("https://rawgit.com/wdc5041/campus-map/gh-pages/data/searchbarv3.json", function (data) {
     
@@ -10,6 +10,7 @@ $.getJSON("https://rawgit.com/pennstategeog467/campus-map/gh-pages/data/building
   
   // Because everything we do after this depends on the JSON file being loaded, the above line waits for the JSON file to be loaded,
   // then the browser will proceed with the below code. The data from the JSON file is the variable `centroids`.
+
   
   // Adding all the building centroids as a points layer
   var markers = L.mapbox.featureLayer(centroids) // Creates a new feature layer from the GeoJSON data `centroids`
@@ -21,22 +22,9 @@ $.getJSON("https://rawgit.com/pennstategeog467/campus-map/gh-pages/data/building
       '<li>Department of That</li>' +
       '</ul>' +
       '<div><img style="margin:2px;width:100%;" src="images/old_main.jpg" /></div>' +
-      '<button class="btn btn-info trigger">Directions to here</button>'
+      '<button class="btn btn-info" onClick="getDirections()">Directions to here</button>'
     ) // This "bindPopUp" method adds the above HTML content to the pop-up window. We need to make that content specific to the feature's data.
     .addTo(map); // Add the new feature layer to the map.
-  
-  // Defines a function that takes all of the names of the buildings and adds them to an array we'll use in the autocomplete search functionality.
-  function getTags(data) {
-    var tagNames = []; // Initialize an empty array
-    // Then for each feature in the dataset, do the following...
-    for (var i = 0; i < data.features.length; i++) {
-      // If the feature has a name that's not NULL or UNDEFINED, add it to our array of tags for autocomplete.
-      if (data.features[i].properties.title !== null && centroids.features[i].properties.title !== undefined) {
-        tagNames.push(data.features[i].properties.title); // Adds the feature property to our array/list of tags
-      }
-    }
-    return tagNames; // The function then returns the array tagNames that we filled as an output.
-  }
     
   $.widget( "custom.catcomplete", $.ui.autocomplete, {
     _create: function() {
@@ -62,21 +50,19 @@ $.getJSON("https://rawgit.com/pennstategeog467/campus-map/gh-pages/data/building
   
   // Setting up the search bar behavior with jQuery UI Autocomplete
   $(function() {
-    // Call the getTags function we defined above on our building centroids point data and save it as availableTags
-    var availableTags = getTags(centroids);
     
     $("#search").catcomplete({
         source: data, //!!Change availableTags to Database Json file!!! The list of tags for the autocomplete is availableTags.
         minLength: 2, // Give autocomplete suggestions after two letters are typed
         autoFocus: true,
         select: function (event, ui) { // An event listener that does the following code once an option from the autocomplete menu is selected
-            setTimeout(zoomToSearchPoint, 50); // When an option is selected, zoom to that point. The zoomToSearchPoint function is definded below.
+            setTimeout(focusMap, 50); // When an option is selected, zoom to that point. The focusMap function is definded below.
         }
     });
   });
   
   // Defining a function that automatically zooms the map to the feature with the same title as whatever's in the search field.
-  function zoomToSearchPoint() {
+  function focusMap() {
     
     var targetName = document.getElementById('search').value; // Gets whatever text the user has entered into the search field.
     
@@ -85,14 +71,26 @@ $.getJSON("https://rawgit.com/pennstategeog467/campus-map/gh-pages/data/building
     // break out of the loop and set the map view to that point,
     // then filter our markers feature layer so that only the target point is showing.
     
-    for (var i = 0; i < centroids.features.length; i++) { // Initialize the for loop
-      if (centroids.features[i].properties.title === targetName) { // For each point, check if the title of the point matches the target
-        var targetPointIndex = i; // Remembers whatever number feature it was that matches for use later.
+    for (var i = 0; i < data.length; i++) { // Initialize the for loop
+      if (data[i].label === targetName) { // For each point, check if the title of the point matches the target
+        var targetID = data[i]["PICTURE ID"]; // Remembers whichever building id it was that matches for use later.
         break; // Skip the rest of the loop, we already found what we wanted.
       } else {
         console.log('not found'); // If we don't find it, and this should never happen, write in the console that we didn't find it.
       }
     }
+    
+    for (var i = 0; i < centroids.features.length; i++) { // Initialize the for loop
+      if (centroids.features[i].properties.building_id == targetID) { // For each point, check if the title of the point matches the target
+        var targetPointIndex = i; // Remembers whichever building id it was that matches for use later.
+        break; // Skip the rest of the loop, we already found what we wanted.
+      } else {
+        console.log('not found'); // If we don't find it, and this should never happen, write in the console that we didn't find it.
+      }
+    }
+    
+    targetLat = centroids.features[targetPointIndex].geometry.coordinates[1];
+    targetLon = centroids.features[targetPointIndex].geometry.coordinates[0];
     
     // Change the map view to the coordinates of the target point.
     map.setView(
@@ -102,13 +100,45 @@ $.getJSON("https://rawgit.com/pennstategeog467/campus-map/gh-pages/data/building
     
     // Filter all the features in the markers feature layer so that only the feature with the same title as our target is showing
     markers.setFilter(function(feature) { 
-      return feature.properties.title === targetName; // Filter the feature with a title property that exactly matches our target.
+      return feature.properties.building_id == targetID; // Filter the feature with a title property that exactly matches our target.
     });
+    
   }
 });
 });
 
 
+///////////// DIRECTIONS /////////////////
+
+function getDirections() { 
+  alert("hi");
+  
+  var directionsAPI = getDirectionsObject(40.793273230746074, -77.86677171823554, targetLat, targetLon)
+  console.log(directionsAPI);
+  
+  $.get(directionsAPI, function (directions) {
+    console.log(directions);
+    L.geoJson(directions.origin).addTo(map);
+    L.geoJson(directions.destination).addTo(map);
+    L.geoJson(directions.routes[0].geometry, {
+        color: "#ff7800",
+        weight: 5,
+        opacity: 0.65
+    }).addTo(map)
+        .bindPopup("Distance: " + (directions.routes[0].distance * 0.000621371).toFixed(2) + " miles" + "<br>Duration: " + (directions.routes[0].duration / 60).toFixed(0) + " mins")
+        .openPopup();
+  });
+
+};
+
+L.mapbox.accessToken = 'pk.eyJ1IjoibW9yZ2FuaGVybG9ja2VyIiwiYSI6Ii1zLU4xOWMifQ.FubD68OEerk74AYCLduMZQ';
+
+function getDirectionsObject(startLat, startLng, endLat, endLng) {
+    var startEnd = startLng + ',' + startLat + ';' + endLng + ',' + endLat;
+    var directions = 'https://api.tiles.mapbox.com/v4/directions/mapbox.walking/' + startEnd + '.json?access_token=' + L.mapbox.accessToken;
+    console.log(directions);
+    return directions;
+}
 
 
 
