@@ -111,7 +111,6 @@ $.getJSON("https://rawgit.com/pennstategeog467/campus-map/gh-pages/data/building
 ///////////// DIRECTIONS /////////////////
 
 function getDirections() { 
-  alert("hi");
   
   var directionsAPI = getDirectionsObject(40.793273230746074, -77.86677171823554, targetLat, targetLon)
   console.log(directionsAPI);
