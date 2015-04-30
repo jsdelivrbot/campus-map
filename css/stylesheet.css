@@ -24,13 +24,11 @@
 
 /* Set dimensions and scrolling of autocomplete menue */
 .ui-autocomplete {
-  max-height: 100px;
+  max-height: 12em;
   overflow-y: auto;
   overflow-x: hidden;
 }
-* html .ui-autocomplete {
-   max-height: 25%;
-}
+
     
 /* Position and style the geolocation button */   
 .leaflet-control-locate {
@@ -43,3 +41,12 @@
 .leaflet-control-locate.active a {
   background-position:-33px -2px;
 }
+
+/* categorical auto complete */
+  .ui-autocomplete-category {
+    font-weight: bold;
+    color: rgb(0,48,135);
+    padding: .2em .4em;
+    margin: .1em 0 .2em;
+    line-height: 1.5;
+  }

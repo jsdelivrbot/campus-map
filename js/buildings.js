@@ -1,5 +1,12 @@
 // The first line here loads the data in the building-centroids GeoJSON file
-$.getJSON("https://rawgit.com/pennstategeog467/campus-map/gh-pages/data/building-centroids.json", function(centroids) { 
+$.getJSON("../data/building-centroids.json", function(centroids) {
+  
+  $.getJSON("https://rawgit.com/wdc5041/campus-map/gh-pages/data/searchbarv3.json", function (data) {
+    
+    console.log("centroids:");
+    console.log(centroids);
+    console.log("data:");
+    console.log(data);
   
   // Because everything we do after this depends on the JSON file being loaded, the above line waits for the JSON file to be loaded,
   // then the browser will proceed with the below code. The data from the JSON file is the variable `centroids`.
@@ -30,20 +37,41 @@ $.getJSON("https://rawgit.com/pennstategeog467/campus-map/gh-pages/data/building
     }
     return tagNames; // The function then returns the array tagNames that we filled as an output.
   }
+    
+  $.widget( "custom.catcomplete", $.ui.autocomplete, {
+    _create: function() {
+      this._super();
+      this.widget().menu( "option", "items", "> :not(.ui-autocomplete-category)" );
+    },
+    _renderMenu: function( ul, items ) {
+      var that = this,
+        currentCategory = "";
+      $.each( items, function( index, item ) {
+        var li;
+        if ( item.category != currentCategory ) {
+          ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
+          currentCategory = item.category;
+        }
+        li = that._renderItemData( ul, item );
+        if ( item.category ) {
+          li.attr( "aria-label", item.category + " : " + item.label );
+        }
+      });
+    }
+  }); 
   
   // Setting up the search bar behavior with jQuery UI Autocomplete
   $(function() {
     // Call the getTags function we defined above on our building centroids point data and save it as availableTags
     var availableTags = getTags(centroids);
     
-    // Create jQuery UI autocomplete functionality in the search input field
-    $( "#search" ).autocomplete({
-      source: availableTags, // The list of tags for the autocomplete is availableTags.
-      minLength: 2, // Give autocomplete suggestions after two letters are typed
-      autoFocus: true,
-      select: function( event, ui ) { // An event listener that does the following code once an option from the autocomplete menu is selected
-        setTimeout( zoomToSearchPoint, 50 ); // When an option is selected, zoom to that point. The zoomToSearchPoint function is definded below.
-      }
+    $("#search").catcomplete({
+        source: data, //!!Change availableTags to Database Json file!!! The list of tags for the autocomplete is availableTags.
+        minLength: 2, // Give autocomplete suggestions after two letters are typed
+        autoFocus: true,
+        select: function (event, ui) { // An event listener that does the following code once an option from the autocomplete menu is selected
+            setTimeout(zoomToSearchPoint, 50); // When an option is selected, zoom to that point. The zoomToSearchPoint function is definded below.
+        }
     });
   });
   
@@ -78,3 +106,10 @@ $.getJSON("https://rawgit.com/pennstategeog467/campus-map/gh-pages/data/building
     });
   }
 });
+});
+
+
+
+
+
+/////////////////////////
