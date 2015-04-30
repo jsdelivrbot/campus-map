@@ -1,5 +1,5 @@
 // The first line here loads the data in the building-centroids GeoJSON file
-$.getJSON("https://cdn.rawgit.com/pennstategeog467/campus-map/gh-pages/data/building-centroids.json", function(centroids) {
+$.getJSON("https://rawgit.com/pennstategeog467/campus-map/gh-pages/data/building-centroids.json", function(centroids) {
   
   $.getJSON("https://rawgit.com/wdc5041/campus-map/gh-pages/data/searchbarv3.json", function (data) {
     
@@ -15,7 +15,7 @@ $.getJSON("https://cdn.rawgit.com/pennstategeog467/campus-map/gh-pages/data/buil
   // Adding all the building centroids as a points layer
   var markers = L.mapbox.featureLayer(centroids) // Creates a new feature layer from the GeoJSON data `centroids`
     .setFilter(function() { return false; }) // Filters out all of the data so no points actually appear on the map. We'll add them when we search for specific points later on.
-    .bindPopup(
+  .bindPopup(
       '<h1>Penn State Building</h1>' +
       '<ul>' +
       '<li>Department of This</li>' +
