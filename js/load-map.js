@@ -1,5 +1,5 @@
 // This access token allows us to use Mapbox's API
-L.mapbox.accessToken = 'pk.eyJ1IjoiYWFyb25kZW5uaXMiLCJhIjoiem5LLURoYyJ9.T3tswGTI5ve8_wE-a02cMw';
+L.mapbox.accessToken = 'pk.eyJ1Ijoid2lsbGlhbWNoaXR0ZXN0ZXIiLCJhIjoiMm5yRTJBayJ9.XNgbTn1Chewc4_158cPl4w';
 
 // Set the maximum bounds so the map user doesn't pan too far from campus
 var southWest = L.latLng(40.7643, -77.9043), // south-west corner of maximum view
@@ -7,7 +7,7 @@ var southWest = L.latLng(40.7643, -77.9043), // south-west corner of maximum vie
     bounds = L.latLngBounds(southWest, northEast); // combine the two corners to set the bounds
 
 // Add a basic slippy map to the webpage using Leaflet.js and save it as the variable map
-var map = L.mapbox.map('map', 'aarondennis.campus-map', { // Create a new map using the map tiles 'aarondennis.f6516522' in the map div
+var map = L.mapbox.map('map', 'williamchittester.y9gxecdi', { // Create a new map using the map tiles 'aarondennis.f6516522' in the map div
     maxBounds: bounds, // set the maximum pan boundaries to bounds
     maxZoom: 19, // set how far into the map you can zoom to level 19
     minZoom: 15  // set how far out from the map you can zoom to level 15
