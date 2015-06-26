@@ -28,10 +28,6 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
-
-*html .ui-autocomplete {
-  max-height: 25%;
-}
     
 /* Position and style the geolocation button */   
 .leaflet-control-locate {
