@@ -11,20 +11,6 @@ $.getJSON("https://rawgit.com/pennstategeog467/campus-map/gh-pages/data/building
   // Because everything we do after this depends on the JSON file being loaded, the above line waits for the JSON file to be loaded,
   // then the browser will proceed with the below code. The data from the JSON file is the variable `centroids`.
 
-  
-  // Adding all the building centroids as a points layer
-  var markers = L.mapbox.featureLayer(centroids) // Creates a new feature layer from the GeoJSON data `centroids`
-    .setFilter(function() { return false; }) // Filters out all of the data so no points actually appear on the map. We'll add them when we search for specific points later on.
-  .bindPopup(
-      '<h1>Penn State Building</h1>' +
-      '<ul>' +
-      '<li>Department of This</li>' +
-      '<li>Department of That</li>' +
-      '</ul>' +
-      '<div><img style="margin:2px;width:100%;" src="images/old_main.jpg" /></div>' +
-      '<!--<button class="btn btn-info" onClick="getDirections()">Directions to here</button>-->'
-    ) // This "bindPopUp" method adds the above HTML content to the pop-up window. We need to make that content specific to the feature's data.
-    .addTo(map); // Add the new feature layer to the map.
     
   $.widget( "custom.catcomplete", $.ui.autocomplete, {
     _create: function() {
@@ -74,6 +60,7 @@ $.getJSON("https://rawgit.com/pennstategeog467/campus-map/gh-pages/data/building
     for (var i = 0; i < data.length; i++) { // Initialize the for loop
       if (data[i].label === targetName) { // For each point, check if the title of the point matches the target
         var targetID = data[i]["PICTURE ID"]; // Remembers whichever building id it was that matches for use later.
+        var buildName = data[i].label; // Remembers what the buildinging name is for the object that was searched.
         break; // Skip the rest of the loop, we already found what we wanted.
       } else {
         console.log('not found'); // If we don't find it, and this should never happen, write in the console that we didn't find it.
@@ -83,12 +70,42 @@ $.getJSON("https://rawgit.com/pennstategeog467/campus-map/gh-pages/data/building
     for (var i = 0; i < centroids.features.length; i++) { // Initialize the for loop
       if (centroids.features[i].properties.building_id == targetID) { // For each point, check if the title of the point matches the target
         var targetPointIndex = i; // Remembers whichever building id it was that matches for use later.
+        var buildingID = centroids.features[i].properties["building_id"]; // Remembers what the building ID to pull building image from PSU_FIS
         break; // Skip the rest of the loop, we already found what we wanted.
       } else {
         console.log('not found'); // If we don't find it, and this should never happen, write in the console that we didn't find it.
       }
     }
     
+    var popupContent=
+      '<ul class= nav nav-tabs">'+
+      '<li class= "active"><a data-toggle= "tab" href= "#home">Home</a></li>'+
+      '<li><a data-toggle= "tabe" href="#info">Infor</a></li>'+
+      '</ul>'+
+      
+      '<div class= "tab-content">'+
+        '<div id="home" class= "tab-pane fade in active">'+
+            '<h1>'+buildName+'</h1>'+
+            '<ul>'+
+            '<li>Department of This</li>'+
+            '<li>Department of That</li>'+
+            '</ul>'+
+            '<div><img style="margin: 2px; width:100%;" src="http://www.facilities.psu.edu/FISWebSite//psufacphotos/'+buildingID+'.jpg" /></div>'+
+        '</div>'+
+        
+        '<div id="info" class= "tab-pane fade">'+
+            '<h3>Future Content </h3>'+
+            '<p>Will be included </p>'+
+        '</div>'
+    ;
+    
+        // Adding all the building centroids as a points layer
+    var markers = L.mapbox.featureLayer(controids) // Creates a new feature layer from the GeoJSON data 'centroid'
+      .setFilter(function() {return false;}) // Filters out all of the data so no points actually appear on the map. We'll add them when we search for specific points later on.
+      .bindPopup(popupContent) // This "bindPopUp" method adds the above HTML content to the pop-up window. 
+      .addTo(map) // Add the new feature layer to the map.
+    ;
+      
     targetLat = centroids.features[targetPointIndex].geometry.coordinates[1];
     targetLon = centroids.features[targetPointIndex].geometry.coordinates[0];
     
