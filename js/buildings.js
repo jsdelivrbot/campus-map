@@ -100,11 +100,11 @@ $.getJSON("https://rawgit.com/pennstategeog467/campus-map/gh-pages/data/building
     ;
     
         // Adding all the building centroids as a points layer
-    var markers = L.mapbox.featureLayer(controids) // Creates a new feature layer from the GeoJSON data 'centroid'
-      .setFilter(function() {return false;}) // Filters out all of the data so no points actually appear on the map. We'll add them when we search for specific points later on.
-      .bindPopup(popupContent) // This "bindPopUp" method adds the above HTML content to the pop-up window. 
-      .addTo(map) // Add the new feature layer to the map.
-    ;
+  var markers = L.mapbox.featureLayer(centroids) // Creates a new feature layer from the GeoJSON data `centroids`
+    .setFilter(function() { return false; }) // Filters out all of the data so no points actually appear on the map. We'll add them when we search for specific points later on.
+  .bindPopup(popupContent) // This "bindPopUp" method adds the above HTML content to the pop-up window. We need to make that content specific to the feature's data.
+    .addTo(map); // Add the new feature layer to the map.
+
       
     targetLat = centroids.features[targetPointIndex].geometry.coordinates[1];
     targetLon = centroids.features[targetPointIndex].geometry.coordinates[0];
