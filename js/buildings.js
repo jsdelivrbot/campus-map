@@ -60,6 +60,7 @@ $.getJSON("https://rawgit.com/pennstategeog467/campus-map/gh-pages/data/building
       if (data[i].label === targetName) { // For each point, check if the title of the point matches the target
       var targetID = data[i]["PICTURE ID"]; // Remembers whichever building id it was that matches for use later.
         var buildName = data[i].label;
+        var facilityType = date[i].category;
         break; // Skip the rest of the loop, we already found what we wanted.
       } else {
         console.log('not found'); // If we don't find it, and this should never happen, write in the console that we didn't find it.
@@ -69,8 +70,6 @@ $.getJSON("https://rawgit.com/pennstategeog467/campus-map/gh-pages/data/building
       if (centroids.features[i].properties.building_id == targetID) { // For each point, check if the title of the point matches the target
         var targetPointIndex = i; // Remembers whichever building id it was that matches for use later.
         var buildingID = centroids.features[i].properties["building_id"];
-        var department1 = centroids.features[i].properties["department1"];
-        var department2 = centroids.features[i].properties["department2"];
         break; // Skip the rest of the loop, we already found what we wanted.
       } else {
         console.log('not found'); // If we don't find it, and this should never happen, write in the console that we didn't find it.
@@ -85,10 +84,9 @@ $.getJSON("https://rawgit.com/pennstategeog467/campus-map/gh-pages/data/building
 
     '<div class="tab-content">'+
     '<div id="home" class="tab-pane fade in active">'+
-      '<h1>'+buildName+'</h1>' +
+      '<h1><b>'+buildName+'</b></h1>' +
       '<ul>' +
-      '<li>Department of '+department1+'</li>' +
-      '<li>Department of '+department2+'</li>' +
+      '<li>'+facilityType+' Facility</li>' +
       '</ul>' +
       '<div><img style="margin:2px;width:100%;" src="http://www.facilities.psu.edu/FISWebSite//psufacphotos/'+buildingID+'.jpg" /></div>' +
     '</div>'+
