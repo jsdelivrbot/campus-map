@@ -84,7 +84,7 @@ $.getJSON("https://rawgit.com/pennstategeog467/campus-map/gh-pages/data/building
 
     '<div class="tab-content">'+
     '<div id="home" class="tab-pane fade in active">'+
-      '<h1><b>'+buildName+'</b></h1>' +
+      '<h1>'+buildName+'</h1>' +
       '<ul>' +
       '<li>'+facilityType+' Facility</li>' +
       '</ul>' +
