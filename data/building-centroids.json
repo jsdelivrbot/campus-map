@@ -3849,8 +3849,13 @@
         ]
       },
       "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
         "title": "Walker Building",
-        "building_id": "0504000"
+        "building_id": "0504000",
+        "department1": "Meteorology",
+        "department2": "Geography"
       }
     },
     {
@@ -12621,8 +12626,12 @@
         ]
       },
       "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
         "title": "Deike Building",
-        "building_id": "0503000"
+        "building_id": "0503000",
+        "department1": "Geology"
       }
     },
     {
