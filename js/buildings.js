@@ -86,7 +86,7 @@ $.getJSON("https://rawgit.com/pennstategeog467/campus-map/gh-pages/data/building
         '<ul class="dropdown-menu">'+
           '<li><a data-toggle="tab" href="#Dept">Departments</a></li>'+
           '<li><a data-toggle="tab" href="#Hours">Hours</a></li>'+
-          '<li><a data-toggle="tab" href="#Resc">Resources Labs</a></li>'+ 
+          '<li><a data-toggle="tab" href="#Resc">Resources</a></li>'+ 
         '</ul>'+
       '</li>'+
     '</ul>'+
