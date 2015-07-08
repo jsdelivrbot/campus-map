@@ -59,8 +59,8 @@ $.getJSON("https://rawgit.com/pennstategeog467/campus-map/gh-pages/data/building
     for (var i = 0; i < data.length; i++) { // Initialize the for loop
       if (data[i].label === targetName) { // For each point, check if the title of the point matches the target
       var targetID = data[i]["PICTURE ID"]; // Remembers whichever building id it was that matches for use later.
-        var buildName = data[i].label;
-        var facilityType = data[i].category;
+        var buildName = data[i].label; //Creates a variable that Remembers the building name
+        var facilityType = data[i].category; //Stores information of building use ie. Academic vs Residential
         break; // Skip the rest of the loop, we already found what we wanted.
       } else {
         console.log('not found'); // If we don't find it, and this should never happen, write in the console that we didn't find it.
@@ -75,27 +75,59 @@ $.getJSON("https://rawgit.com/pennstategeog467/campus-map/gh-pages/data/building
         console.log('not found'); // If we don't find it, and this should never happen, write in the console that we didn't find it.
       }
     }
-    
+  
+  //Variable popupcontent contains the HTML that is used within the .bindpopup to add the building name and image plus information tabs  
   var popupContent= 
     '<ul class="nav nav-tabs">'+
-    '<li class="active"><a data-toggle="tab" href="#home">Home</a></li>'+
-    '<li><a data-toggle="tab" href="#menu1">Info</a></li>'+
+      '<li class="active"><a data-toggle="tab" href="#home">Home</a></li>'+
+      '<li class="dropdown">'+
+        '<a class="dropdown-toggle" data-toggle="dropdown" href="3">Info'+
+        '<span class="caret"></span></a>'+
+        '<ul class="dropdown-menu">'+
+          '<li><a data-toggle="tab" href="#Dept">Departments</a></li>'+
+          '<li><a data-toggle="tab" href="#Hours">Hours</a></li>'+
+          '<li><a data-toggle="tab" href="#Resc">Resources Labs</a></li>'+ 
+        '</ul>'+
+      '</li>'+
     '</ul>'+
 
     '<div class="tab-content">'+
+    
     '<div id="home" class="tab-pane fade in active">'+
-      '<h1>'+buildName+'</h1>' +
-      '<ul>' +
-      '<li>'+facilityType+' Facility</li>' +
-      '</ul>' +
-      '<div><img style="margin:2px;width:100%;" src="http://www.facilities.psu.edu/FISWebSite//psufacphotos/'+buildingID+'.jpg" /></div>' +
+      '<h1>'+buildName+'</h1>'+
+      '<ul>'+
+      '<li>'+facilityType+' Facility</li>'+
+      '</ul>'+
+      '<div><img style="margin:2px;width:100%;" src="http://www.facilities.psu.edu/FISWebSite//psufacphotos/'+buildingID+'.jpg" /></div>'+
     '</div>'+
     
-    '<div id="menu1" class="tab-pane fade">'+
-      '<h3>Future Content</h3>'+
-      '<p>To be added</p>'+
-    '</div>'
+    '<div id="Dept" class="tab-pane fade">'+
+      '<h3><b>Department</b></h3>'+
+      '<ul>'+
+        '<li>Department of This</li>'+
+        '<li>Department of That</li>'+
+      '<ul>'+
+    '</div>'+
+    
+    '<div id="Hours" class="tab-pane fade">'+
+      '<h3><b>Hours</b></h3>'+
+      '<ul>'+
+        '<li>Open Between</li>'+
+        '<li>00:00AM - 00:00PM</li>'+
+      '<ul>'+
+    '</div>'+
+    
+    '<div id="Resc" class="tab-pane fade">'+
+      '<h3><b>Resources</b></h3>'+
+      '<ul>'+
+        '<li>No Computer Labs</li>'+
+      '<ul>'+
+    '</div>'+
+  
+  '</div>'
  ;
+ 
+ 
      // Adding all the building centroids as a points layer
   var markers = L.mapbox.featureLayer(centroids) // Creates a new feature layer from the GeoJSON data `centroids`
     .setFilter(function() { return false; }) // Filters out all of the data so no points actually appear on the map. We'll add them when we search for specific points later on.
