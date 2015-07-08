@@ -102,7 +102,7 @@ $.getJSON("https://rawgit.com/pennstategeog467/campus-map/gh-pages/data/building
     '</div>'+
     
     '<div id="Dept" class="tab-pane fade">'+
-      '<h3><b>Department</b></h3>'+
+      '<h3><b>Departments</b></h3>'+
       '<ul>'+
         '<li>Department of This</li>'+
         '<li>Department of That</li>'+
