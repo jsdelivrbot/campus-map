@@ -1,7 +1,7 @@
 // The first line here loads the data in the building-centroids GeoJSON file
-$.getJSON("https://rawgit.com/pennstategeog467/campus-map/gh-pages/data/building-centroids.json", function(centroids) {
+$.getJSON("https://cdn.jsdelivr.net/gh/pennstategeog467/campus-map@gh-pages/data/building-centroids.json", function(centroids) {
   
-  $.getJSON("https://rawgit.com/wdc5041/campus-map/gh-pages/data/searchbarv3.json", function (data) {
+  $.getJSON("https://cdn.jsdelivr.net/gh/wdc5041/campus-map@gh-pages/data/searchbarv3.json", function (data) {
     
     console.log("centroids:");
     console.log(centroids);
